@@ -78,7 +78,7 @@ app.delete('/todos/:id', (req, res) => {
 	});
 });
 
-// UPDATE /todos/:id
+// PATCH /todos/:id
 app.patch('/todos/:id', (req, res) => {
 	const id = req.params.id;
 	// Uses lodash to create body
