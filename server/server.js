@@ -15,7 +15,7 @@ const port = process.env.PORT;
 // MIDDLEWARE
 app.use(bodyParser.json());
 
-// CREATE todos
+// POST /todos
 app.post('/todos', (req,res) => {
 	const todo = new Todo({
 		text: req.body.text
@@ -28,7 +28,7 @@ app.post('/todos', (req,res) => {
 	});
 });
 
-// GET todos
+// GET /todos
 app.get('/todos', (req, res) => {
 	Todo.find().then((todos) => {
 		res.send({
@@ -105,6 +105,20 @@ app.patch('/todos/:id', (req, res) => {
 		res.status(200).send({todo});
 	}).catch((e) => {
 		res.status(400).send();
+	});
+});
+
+// POST /users
+app.post('/users', (req,res) => {
+	const body = _.pick(req.body, ['email', 'password']);
+	const user = new User(body);
+
+	user.save().then(() => {
+		return user.generateAuthToken();
+	}).then((token) => {
+		res.header('x-auth', token).send(user);
+	}).catch((e) => {
+		res.status(400).send(e)
 	});
 });
 
