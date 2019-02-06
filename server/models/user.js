@@ -52,6 +52,18 @@ UserSchema.methods.generateAuthToken = function () {
 	});
 };
 
+UserSchema.methods.removeToken = function (token) {
+	const user = this;
+	// MONGO DB OPERATOR $pull
+	return user.update({
+		$pull: {
+			tokens: {
+				token: token
+			}
+		}
+	});
+};
+
 UserSchema.statics.findByToken = function (token) {
 	const User = this;
 	let decoded;
@@ -93,6 +105,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
 		});
 	});
 };
+
 
 UserSchema.pre('save', function (next) {
 	let user = this;
